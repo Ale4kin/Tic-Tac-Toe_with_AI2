@@ -28,6 +28,24 @@ subprojects {
         test.java.srcDir 'test'
     }
 
+    // Configure the main class for the executable JAR
+    jar {
+        manifest {
+            attributes 'Main-Class': 'tictactoe.TicTacToeGUI'
+        }
+        // If you want to create a fat JAR that includes dependencies (not strictly needed for this project):
+        // from {
+        //     configurations.runtimeClasspath.collect { it.isDirectory() ? it : zipTree(it) }
+        // } 
+        // It's often better to specify a base name for the JAR if not using 'application' plugin's distribution tasks
+        // archiveBaseName = 'TicTacToeGame' // Example
+    }
+
+    // The application plugin also allows setting mainClassName directly for tasks like 'run' and distribution zips
+    if (project.name != 'util') { // Apply only to the game subproject(s)
+        mainClassName = 'tictactoe.TicTacToeGUI'
+    }
+
     test {
         systemProperty "file.encoding", "utf-8"
         outputs.upToDateWhen { false }
